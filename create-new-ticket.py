@@ -14,8 +14,10 @@ from variables import main_URL, Filtered_URL, username, password, path_to_screen
 driver = webdriver.Firefox()
 
 url = (main_URL)
+# Go to webpage
 driver.get(url)
 
+#Wait for element to be on screen
 WebDriverWait(driver, 5).until(
     EC.presence_of_element_located((By.ID, "i0116"))
 )
@@ -32,8 +34,12 @@ element = driver.find_element(By.ID, "i0118")
 element.clear()
 element.send_keys(password)
 
+
+#Brief pause to wait for loading
 time.sleep(2)
 
+
+#This loop should try and click a couple of different sign in buttons, but was sometimes failing so I put in a loop to retry it until it's successful
 while True:
     try:
         check_input = driver.find_element(By.ID, "idSIButton9")
@@ -61,6 +67,8 @@ time.sleep(4)
 
 driver.switch_to.frame(0)
 
+
+# This will check to see if there is a splash that shows there are no tickets available and if it's there, it will terminate the script since theres no point in taking a screenshot of a blank queue
 try:
     driver.find_element(By.CLASS_NAME, 'list-flavin')
     print("No tickets found, script terminating.")
@@ -76,6 +84,8 @@ file_path = (path_to_screenshots)
 
 time.sleep(240)
 
+
+#This deletes the file after your script is finished so that it doesn't clog your storage and you don't have to worry about overwriting it next time you run it
 try:
     os.remove(file_path)
     print(f"File '{file_path}' deleted successfully.")

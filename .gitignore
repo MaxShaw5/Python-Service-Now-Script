@@ -1,3 +1,6 @@
 variables.py
 test.py
 __pycache__/
+dist/
+create-new-ticket.spec
+build/

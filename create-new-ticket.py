@@ -65,6 +65,8 @@ driver.get(Filtered_URL)
 
 time.sleep(4)
 
+# The next element is inside of an iframe which you have to swap to before you can find any elemnents within it
+
 driver.switch_to.frame(0)
 
 

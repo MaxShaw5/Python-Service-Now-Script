@@ -69,12 +69,15 @@ driver.switch_to.frame(0)
 
 
 # This will check to see if there is a splash that shows there are no tickets available and if it's there, it will terminate the script since theres no point in taking a screenshot of a blank queue
-try:
-    driver.find_element(By.CLASS_NAME, 'list-flavin')
-    print("No tickets found, script terminating.")
-    sys.exit()
-except:
-    print("Tickets found, script continuing.")
+while True:
+    try:
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'list-flavin')))
+        print("No tickets found, script terminating.")
+        driver.quit()
+        sys.exit()
+    except Exception as e:
+        print("Tickets found, script continuing.")
+        break
     
 
 driver.save_full_page_screenshot(path_to_screenshots)

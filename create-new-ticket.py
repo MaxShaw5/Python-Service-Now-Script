@@ -8,7 +8,7 @@ import time
 import os
 import sys
 
-from variables import main_URL, Filtered_URL, username, password, path_to_screenshots
+from variables import main_URL, rm_filtered_URL, username, password, rm_path_to_screenshots, js_path_to_screenshots, js_filtered_URL, mb_filtered_URL, mb_path_to_screenshots
 
 
 driver = webdriver.Firefox()
@@ -61,7 +61,7 @@ link.click()
 
 time.sleep(4)
 
-driver.get(Filtered_URL)
+driver.get(rm_filtered_URL)
 
 time.sleep(4)
 
@@ -69,34 +69,106 @@ time.sleep(4)
 
 driver.switch_to.frame(0)
 
+rm_file_path = (rm_path_to_screenshots)
+
 
 # This will check to see if there is a splash that shows there are no tickets available and if it's there, it will terminate the script since theres no point in taking a screenshot of a blank queue
 while True:
     try:
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'list-flavin')))
-        print("No tickets found, script terminating.")
-        driver.quit()
-        sys.exit()
+        print("No tickets found for Richard, moving to next technician.")
+        break
     except Exception as e:
         print("Tickets found, script continuing.")
+        driver.save_full_page_screenshot(rm_path_to_screenshots)
+        print(f"Richard's tickets have been saved to {rm_file_path}")
         break
-    
 
-driver.save_full_page_screenshot(path_to_screenshots)
+# Technician 2 block
+
+driver.get(js_filtered_URL)
+
+time.sleep(4)
+
+driver.switch_to.frame(0)
+
+js_file_path = (js_path_to_screenshots)
 
 
-file_path = (path_to_screenshots)
+while True:
+    try:
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'list-flavin')))
+        print("No tickets found for Jerome, moving to next techncian.")
+        break
+    except Exception as e:
+        print("Tickets found, script continuing.")
+        driver.save_full_page_screenshot(js_file_path)
+        print(f"Jerome's tickets have been saved to {js_file_path}")
+        break    
 
+# End technician 2 block
+
+# Technician 3 block
+
+mb_file_path = mb_path_to_screenshots
+
+driver.get(mb_filtered_URL)
+
+time.sleep(4)
+
+driver.switch_to.frame(0)
+
+
+while True:
+    try:
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'list-flavin')))
+        print("No tickets found for Miguel, scraping terminated.")
+        driver.quit()
+        break
+    except Exception as e:
+        print("Tickets found, script continuing.")
+        driver.save_full_page_screenshot(mb_file_path)
+        print(f"Miguel's tickets have been saved to {mb_file_path}")
+        break    
+
+# End technician 3 block
+
+
+# Quick sleep to ensure the PA flow finds the screenshots and sends the email as intended
 time.sleep(240)
 
 
-#This deletes the file after your script is finished so that it doesn't clog your storage and you don't have to worry about overwriting it next time you run it
+#This deletes all the files after your script is finished so that it doesn't clog your storage and you don't have to worry about overwriting it next time you run it
 try:
-    os.remove(file_path)
-    print(f"File '{file_path}' deleted successfully.")
+    os.remove(rm_file_path)
+    print(f"File '{rm_file_path}' deleted successfully.")
 except FileNotFoundError:
-    print(f"Error: File '{file_path}' not found.")
+    print(f"Error: File '{rm_file_path}' not found.")
 except PermissionError:
-    print(f"Error: Permission denied to delete '{file_path}'.")
+    print(f"Error: Permission denied to delete '{rm_file_path}'.")
 except Exception as e:
     print(f"An unexpected error occurred: {e}")
+    
+try:
+    os.remove(js_file_path)
+    print(f"File '{js_file_path}' deleted successfully.")
+except FileNotFoundError:
+    print(f"Error: File '{js_file_path}' not found.")
+except PermissionError:
+    print(f"Error: Permission denied to delete '{js_file_path}'.")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+
+try:
+    os.remove(mb_file_path)
+    print(f"File '{mb_file_path}' deleted successfully.")
+except FileNotFoundError:
+    print(f"Error: File '{mb_file_path}' not found.")
+except PermissionError:
+    print(f"Error: Permission denied to delete '{mb_file_path}'.")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+
+
+driver.quit()
+sys.exit()

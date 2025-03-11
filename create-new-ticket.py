@@ -181,6 +181,10 @@ while True:
 
 # End technician 5 block
 
+#No more scraping so we can close the webdriver
+
+driver.quit()
+
 
 # Quick sleep to ensure the PA flow finds the screenshots and sends the email as intended
 time.sleep(240)
@@ -239,5 +243,4 @@ except Exception as e:
 
 #End of file deletion blocks
 
-driver.quit()
 sys.exit()

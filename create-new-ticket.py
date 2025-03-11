@@ -8,7 +8,7 @@ import time
 import os
 import sys
 
-from variables import main_URL, rm_filtered_URL, username, password, rm_path_to_screenshots, js_path_to_screenshots, js_filtered_URL, mb_filtered_URL, mb_path_to_screenshots
+from variables import main_URL, rm_filtered_URL, username, password, rm_path_to_screenshots, js_path_to_screenshots, js_filtered_URL, mb_filtered_URL, mb_path_to_screenshots, sg_filtered_URL, sg_path_to_screenshots, ei_filtered_URL, ei_path_to_screenshots
 
 
 driver = webdriver.Firefox()
@@ -110,6 +110,54 @@ while True:
 
 # Technician 3 block
 
+driver.get(sg_filtered_URL)
+
+time.sleep(4)
+
+driver.switch_to.frame(0)
+
+sg_file_path = (sg_path_to_screenshots)
+
+
+while True:
+    try:
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'list-flavin')))
+        print("No tickets found for Shannon, moving to next techncian.")
+        break
+    except Exception as e:
+        print("Tickets found, script continuing.")
+        driver.save_full_page_screenshot(sg_file_path)
+        print(f"Shannon's tickets have been saved to {sg_file_path}")
+        break    
+
+# End technician 3 block
+
+# Technician 4 block
+
+driver.get(ei_filtered_URL)
+
+time.sleep(4)
+
+driver.switch_to.frame(0)
+
+ei_file_path = (ei_path_to_screenshots)
+
+
+while True:
+    try:
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'list-flavin')))
+        print("No tickets found for Eric, moving to next techncian.")
+        break
+    except Exception as e:
+        print("Tickets found, script continuing.")
+        driver.save_full_page_screenshot(ei_file_path)
+        print(f"Eric's tickets have been saved to {ei_file_path}")
+        break    
+
+# End technician 4 block
+
+# Technician 5 block
+
 mb_file_path = mb_path_to_screenshots
 
 driver.get(mb_filtered_URL)
@@ -131,7 +179,7 @@ while True:
         print(f"Miguel's tickets have been saved to {mb_file_path}")
         break    
 
-# End technician 3 block
+# End technician 5 block
 
 
 # Quick sleep to ensure the PA flow finds the screenshots and sends the email as intended
@@ -169,6 +217,27 @@ except PermissionError:
 except Exception as e:
     print(f"An unexpected error occurred: {e}")
 
+try:
+    os.remove(sg_file_path)
+    print(f"File '{mb_file_path}' deleted successfully.")
+except FileNotFoundError:
+    print(f"Error: File '{sg_file_path}' not found.")
+except PermissionError:
+    print(f"Error: Permission denied to delete '{sg_file_path}'.")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+
+try:
+    os.remove(ei_file_path)
+    print(f"File '{ei_file_path}' deleted successfully.")
+except FileNotFoundError:
+    print(f"Error: File '{ei_file_path}' not found.")
+except PermissionError:
+    print(f"Error: Permission denied to delete '{ei_file_path}'.")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+
+#End of file deletion blocks
 
 driver.quit()
 sys.exit()
